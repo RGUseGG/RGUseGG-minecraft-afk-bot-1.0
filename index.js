@@ -4,32 +4,27 @@ function createBot() {
   const bot = mineflayer.createBot({
     host: process.env.MC_SERVER || '191.96.231.2',
     port: parseInt(process.env.MC_PORT) || 15336,
-    username: process.env.MC_USERNAME || 'AFK_Bot',
-    version: false, // Auto detect version
-    // 🔧 FIX: Chat plugin disable করা হলো error এড়ানোর জন্য
+    username: process.env.MC_USERNAME || 'CREATIVE_BOT',
+    version: '1.20.1', // ✅ Minecraft ভার্সন নির্দিষ্ট করে দেওয়া হলো
     plugins: {
-      chat: false
+      chat: false // ✅ prismarine-chat error বন্ধ করতে chat plugin off
     }
   });
 
-  // ✅ লগইনের পর চ্যাট কমান্ড পাঠাবে
   bot.on('spawn', () => {
-    console.log('🤖 Bot সার্ভারে যুক্ত হয়েছে!');
-    bot.chat('/login creativeafkbot');
+    console.log('🤖 CREATIVE_BOT সার্ভারে যুক্ত হয়েছে!');
+    bot.chat('/login creativeafkbot'); // ✅ AuthMe / LoginSecurity command
   });
 
-  // ✅ যখন বট ডিসকানেক্ট হবে তখন আবার চালু হবে
   bot.on('end', () => {
-    console.log('🔄 Bot disconnected! Reconnecting...');
+    console.log('🔄 CREATIVE_BOT disconnected! Reconnecting...');
     setTimeout(createBot, 5000);
   });
 
-  // ✅ কোনো এরর হলে কনসোলে দেখাবে
   bot.on('error', err => {
     console.log('❌ Error:', err);
   });
 
-  // 🛠️ চ্যাট মেসেজ এলে safely handle করবে (optional)
   bot.on('message', (message) => {
     try {
       console.log('📨 Chat:', message.toString());
